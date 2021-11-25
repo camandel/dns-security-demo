@@ -1,0 +1,53 @@
+version: '3'
+services:
+  acme-dns:
+    build: ./acme-dns
+    container_name: acme-dns
+    hostname: dns.acme.corp
+    dns:
+      - 172.21.0.2
+    dns_search:
+      - acme.corp
+    networks:
+      acme-network:
+        ipv4_address: 172.21.0.2
+      external-network:
+        ipv4_address: 172.21.1.2
+
+  acme-server:
+    build: ./acme-server
+    container_name: acme-server
+    hostname: server.acme.corp
+    dns:
+      - 172.21.0.2
+    dns_search:
+      - acme.corp
+    depends_on:
+      - acme-dns
+    networks:
+      acme-network:
+        ipv4_address: 172.21.0.3
+
+  attacker-dns:
+    build: ./attacker-dns
+    container_name: attacker-dns
+    hostname: dns.attacker.tk
+    depends_on:
+      - acme-dns
+    networks:
+      external-network:
+        ipv4_address: 172.21.1.3
+
+networks:
+  acme-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.21.0.0/24
+  external-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.21.1.0/24
