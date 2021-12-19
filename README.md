@@ -1,5 +1,5 @@
 # DNS infiltration and exfiltration demo
-This repository contains codes and examples used for an article.
+This repository contains codes and examples used for this [article](https://floatingpoint.sorint.it/blog/post/introduction-to-dns-exfiltration-and-infiltration).
 ## Screeshots
 ![screenshot](/assets/screenshot.jpg)
 ## Requirements
